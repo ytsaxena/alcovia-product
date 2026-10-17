@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alcovia · Systems & Analytics</title>
+  <style>
+    :root { --brand:#5b5bf0; --brand2:#8b5cf6; --bg:#f4f5fa; --panel:#fff; --ink:#0f172a; --muted:#6b7280; --line:#e6e8f0; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif; background:var(--bg); color:var(--ink); }
+    .wrap { max-width:960px; margin:0 auto; padding:64px 24px; }
+    .brand { display:flex; align-items:center; gap:14px; margin-bottom:8px; }
+    .mark { width:46px; height:46px; border-radius:13px; background:linear-gradient(135deg,var(--brand),var(--brand2)); display:grid; place-items:center; color:#fff; font-weight:800; font-size:20px; box-shadow:0 10px 24px -8px rgba(91,91,240,.6); }
+    h1 { font-size:26px; letter-spacing:-.5px; margin:0; }
+    .sub { color:var(--muted); font-size:14px; margin:0 0 36px; }
+    .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+    a.card { display:block; text-decoration:none; color:inherit; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:22px; transition:transform .18s, box-shadow .18s, border-color .18s; }
+    a.card:hover { transform:translateY(-3px); box-shadow:0 20px 40px -22px rgba(37,38,79,.4); border-color:var(--brand); }
+    .tag { font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase; color:var(--brand); background:rgba(91,91,240,.1); padding:3px 10px; border-radius:20px; }
+    .card h2 { font-size:17px; margin:12px 0 6px; letter-spacing:-.2px; }
+    .card p { margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+    .card .go { margin-top:14px; font-weight:650; color:var(--brand); font-size:13px; }
+    .doc { margin-top:18px; background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:22px; }
+    .doc h2 { font-size:16px; margin:0 0 6px; }
+    .doc p { margin:0; color:var(--muted); font-size:13px; }
+    .doc a { color:var(--brand); font-weight:650; text-decoration:none; }
+    footer { margin-top:40px; color:var(--muted); font-size:12px; border-top:1px solid var(--line); padding-top:18px; }
+    code { background:#eef0f7; padding:1px 6px; border-radius:6px; font-size:12px; }
+    @media (max-width:720px){ .grid{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <div class="mark">A</div>
+      <div>
+        <h1>Alcovia — Product, Systems &amp; Analytics</h1>
+      </div>
+    </div>
+    <p class="sub">Prototype deliverables: GTM tracking, student progress, and a unified persona scorecard.</p>
+
+    <div class="grid">
+      <a class="card" href="./student-dashboard/">
+        <span class="tag">Problem 4 · Product</span>
+        <h2>Student Progress Dashboard</h2>
+        <p>Cohort-average + per-Alcovian view across day / week / month / quarter rigour, scored in 3 lenses: conducted, liked, performance.</p>
+        <div class="go">Open dashboard →</div>
+      </a>
+
+      <a class="card" href="./persona-scorecard/">
+        <span class="tag">Cross-persona</span>
+        <h2>Unified Persona Scorecard</h2>
+        <p>One blended view of Sales, Marketing &amp; Product north-stars, bridging ClickUp, Smallest.ai, N8N, app events, Meta &amp; Razorpay — plus system health.</p>
+        <div class="go">Open scorecard →</div>
+      </a>
+    </div>
+
+    <div class="doc">
+      <h2>KPI Framework &amp; Metric Dictionary</h2>
+      <p>Definitions, formulas, sources, owners, cadence and the data architecture that makes every dashboard auditable — so the structures don't break.
+        <br><a href="./KPI-Framework.md">Read the doc →</a></p>
+    </div>
+
+    <div class="doc">
+      <h2>GTM Tracker <span style="font-weight:400;color:var(--muted)">(Problem 2 · separate app)</span></h2>
+      <p>Revenue target vs achievement, funnel journey, campaign performance and RCA.
+        <br><a href="https://ytsaxena.github.io/alcovia-gtm-tracker/">Open GTM tracker →</a></p>
+    </div>
+
+    <footer>
+      Prototype · dummy data throughout. Served via GitHub Pages.
+    </footer>
+  </div>
+</body>
+</html>

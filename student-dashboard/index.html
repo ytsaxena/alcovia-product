@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alcovia · Student Progress Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- ============ SIDEBAR / TABS ============ -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">A</div>
+        <div>
+          <div class="brand-name">Alcovia Progress</div>
+          <div class="brand-sub">Advisor Control Center</div>
+        </div>
+      </div>
+
+      <div class="nav-label">Rigour</div>
+      <nav class="nav" id="nav">
+        <button class="navlink active" data-page="overview"><span class="dot"></span>Journey Scorecard</button>
+        <button class="navlink" data-page="daily"><span class="dot"></span>Daily</button>
+        <button class="navlink" data-page="weekly"><span class="dot"></span>Weekly · Academic</button>
+        <button class="navlink" data-page="monthly"><span class="dot"></span>Monthly · Career</button>
+        <button class="navlink" data-page="quarterly"><span class="dot"></span>Quarterly · Themes</button>
+        <button class="navlink" data-page="students"><span class="dot"></span>Students</button>
+        <button class="navlink" data-page="approach"><span class="dot"></span>Approach</button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="chip"><span class="pulse"></span><span id="lastUpdated">12 Alcovians · dummy data</span></div>
+      </div>
+    </aside>
+
+    <!-- ============ MAIN ============ -->
+    <div class="main">
+      <header class="topbar">
+        <div class="page-title">
+          <h1 id="pageHeading">Journey Scorecard</h1>
+          <p id="rangeSub">Cohort averages across day · week · month · quarter</p>
+        </div>
+        <div class="topbar-spacer"></div>
+        <div class="control">
+          <div class="select-wrap">
+            <select id="cohort" aria-label="Select view">
+              <option value="cohort" selected>Cohort average</option>
+              <option value="top">Top performers</option>
+              <option value="risk">At-risk</option>
+            </select>
+          </div>
+          <button class="btn" id="printBtn" title="Export / print">Export</button>
+          <button class="btn icon" id="themeBtn" title="Toggle theme">◐</button>
+        </div>
+      </header>
+
+      <main class="content">
+        <!-- ============ JOURNEY SCORECARD ============ -->
+        <section class="page active" data-page="overview">
+          <div class="section-head">
+            <span class="eyebrow">Cohort</span>
+            <h2>Journey scorecard · 3 lenses</h2>
+            <span class="hint">Quantity = did Alcovia conduct it · Quality = did Alcovians like it · Performance = student outcome</span>
+          </div>
+
+          <div class="mgrid three" id="ovCards" style="margin-bottom:16px"></div>
+
+          <div class="grid cols-3">
+            <div class="card span-2">
+              <div class="card-head"><h3>KPI matrix — every activity, all 3 lenses</h3><span class="sub" id="matrixSub"></span></div>
+              <div class="table-wrap">
+                <table id="matrixTable">
+                  <thead>
+                    <tr><th>Activity</th><th>Cadence</th><th>Quantity · conducted</th><th>Quality · liked</th><th>Performance · outcome</th></tr>
+                  </thead>
+                  <tbody id="matrixRows"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h3>Syllabus on-track</h3><span class="sub">share of cohort</span></div>
+              <div class="donut-wrap">
+                <div class="donut" id="ovDonut"></div>
+                <div style="flex:1" id="ovDonutLegend"></div>
+              </div>
+              <div class="drill-h" style="margin-top:16px">Focus time vs 30-min target</div>
+              <div id="ovFocusBars"></div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px"><div class="insight" id="ovInsight"></div></div>
+        </section>
+
+        <!-- ============ DAILY ============ -->
+        <section class="page" data-page="daily">
+          <div class="section-head">
+            <span class="eyebrow">Daily</span>
+            <h2>Post-school rigour</h2>
+            <span class="hint">Timetable · quizzes · focus time · active minutes · recovery</span>
+          </div>
+          <div class="mgrid three" id="dailyCards" style="margin-bottom:16px"></div>
+          <div class="grid cols-2">
+            <div class="card">
+              <div class="card-head"><h3>Daily quiz — avg score by student</h3><span class="sub" id="dailyQuizSub"></span></div>
+              <div class="chart" id="dailyQuizChart"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>Focus minutes vs 30-min target</h3><span class="sub" id="dailyFocusSub"></span></div>
+              <div class="chart" id="dailyFocusChart"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-head"><h3>Per-student daily snapshot</h3></div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Alcovian</th><th class="num">Timetable adherence</th><th class="num">Quiz attended</th><th class="num">Quiz avg</th><th class="num">Focus min/day</th><th class="num">Active min</th><th class="num">Recovery</th></tr></thead>
+              <tbody id="dailyRows"></tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- ============ WEEKLY ============ -->
+        <section class="page" data-page="weekly">
+          <div class="section-head">
+            <span class="eyebrow">Weekly</span>
+            <h2>Academic roadmap</h2>
+            <span class="hint">Goal setting · syllabus completion · rigour · time management</span>
+          </div>
+          <div class="mgrid three" id="weeklyCards" style="margin-bottom:16px"></div>
+          <div class="grid cols-2">
+            <div class="card">
+              <div class="card-head"><h3>Syllabus completion by student</h3><span class="sub" id="weeklySyllabusSub"></span></div>
+              <div class="chart" id="weeklySyllabusChart"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>Chapter readiness (rigour stage)</h3><span class="sub">0 none → 5 exam-ready</span></div>
+              <div class="chart" id="weeklyRigourChart"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-head"><h3>Per-student academic snapshot</h3></div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Alcovian</th><th class="num">Syllabus %</th><th class="num">On track</th><th class="num">Rigour</th><th class="num">Task completion</th><th class="num">Deadline adherence</th><th class="num">Time-est. accuracy</th></tr></thead>
+              <tbody id="weeklyRows"></tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- ============ MONTHLY ============ -->
+        <section class="page" data-page="monthly">
+          <div class="section-head">
+            <span class="eyebrow">Monthly</span>
+            <h2>Career discovery &amp; community</h2>
+            <span class="hint">Workshops · pods · peer sessions · mentor calls · personal branding</span>
+          </div>
+          <div class="mgrid three" id="monthlyCards" style="margin-bottom:16px"></div>
+          <div class="grid cols-2">
+            <div class="card">
+              <div class="card-head"><h3>Session ratings (liked)</h3><span class="sub">avg out of 5</span></div>
+              <div class="chart" id="monthlyRatingChart"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>Attendance vs scheduled</h3><span class="sub" id="monthlyAttSub"></span></div>
+              <div id="monthlyAttBars"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-head"><h3>Per-student participation</h3></div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Alcovian</th><th class="num">Workshops</th><th class="num">Pods</th><th class="num">Peer</th><th class="num">Mentor</th><th class="num">Branding</th><th class="num">Avg rating</th></tr></thead>
+              <tbody id="monthlyRows"></tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- ============ QUARTERLY ============ -->
+        <section class="page" data-page="quarterly">
+          <div class="section-head">
+            <span class="eyebrow">Quarterly</span>
+            <h2>Themes &amp; roadmaps</h2>
+            <span class="hint">Experiences · themes (social work / entrepreneurship / summer) · career, personal, academic roadmaps</span>
+          </div>
+          <div class="mgrid three" id="quarterlyCards" style="margin-bottom:16px"></div>
+          <div class="grid cols-2">
+            <div class="card">
+              <div class="card-head"><h3>Cohort coverage — quarterly experiences</h3><span class="sub">% of Alcovians who did it</span></div>
+              <div id="quarterlyExpBars"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><h3>Theme progress</h3><span class="sub" id="themeSub"></span></div>
+              <div class="chart" id="themeChart"></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:16px">
+            <div class="card-head"><h3>Per-student roadmap status</h3></div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Alcovian</th><th class="num">Podcast</th><th class="num">Competition</th><th class="num">Parent-child</th><th class="num">Out-of-city</th><th class="num">Social work</th><th class="num">Entrepreneurship</th><th class="num">Career</th><th class="num">Personal</th><th class="num">Academic</th></tr></thead>
+              <tbody id="quarterlyRows"></tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- ============ STUDENTS ============ -->
+        <section class="page" data-page="students">
+          <div class="section-head">
+            <span class="eyebrow">Roster</span>
+            <h2>Progress on average for all kids</h2>
+            <span class="hint">One row per Alcovian · click to drill into their full journey</span>
+          </div>
+          <div class="card">
+            <div class="card-head">
+              <h3>All Alcovians</h3>
+              <div style="margin-left:auto" class="seg" id="rosterFilter">
+                <button data-f="all" class="active">All</button>
+                <button data-f="ontrack">On track</button>
+                <button data-f="risk">At risk</button>
+              </div>
+            </div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Alcovian</th><th class="num">Engagement</th><th class="num">Focus min</th><th class="num">Syllabus %</th><th class="num">Rigour</th><th class="num">Roadmap</th><th class="num">Participation</th><th>Status</th></tr></thead>
+              <tbody id="rosterRows"></tbody>
+            </table></div>
+          </div>
+        </section>
+
+        <!-- ============ APPROACH ============ -->
+        <section class="page" data-page="approach">
+          <div class="section-head">
+            <span class="eyebrow">Method</span>
+            <h2>How this dashboard is designed to run</h2>
+          </div>
+
+          <div class="grid cols-2">
+            <div class="card">
+              <div class="card-head"><h3>Design logic</h3></div>
+              <div class="stack">
+                <p class="muted" style="margin:0">One screen answers three questions per activity — <b>conducted (quantity)</b>, <b>liked (quality)</b>, <b>outcome (performance)</b> — so advisors stop hunting through documents and ClickUp folders.</p>
+                <div class="stat-row"><span class="sr-name">Cadence lens</span><span class="sr-val">Day · Week · Month · Quarter</span></div>
+                <div class="stat-row"><span class="sr-name">Audience</span><span class="sr-val">Academic advisor + founder</span></div>
+                <div class="stat-row"><span class="sr-name">Two views</span><span class="sr-val">Cohort average + per-Alcovian</span></div>
+                <div class="stat-row"><span class="sr-name">North-star</span><span class="sr-val">Syllabus on-track &amp; rigour adherence</span></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-head"><h3>In what time</h3></div>
+              <div class="stack">
+                <div class="stat-row"><span class="sr-name">Daily data capture</span><span class="sr-val">Automatic (app + wearables)</span></div>
+                <div class="stat-row"><span class="sr-name">Weekly advisor review</span><span class="sr-val">15 min · Monday</span></div>
+                <div class="stat-row"><span class="sr-name">Monthly consolidation</span><span class="sr-val">1 hour · month-end</span></div>
+                <div class="stat-row"><span class="sr-name">Quarterly OKR review</span><span class="sr-val">Half day</span></div>
+                <p class="muted" style="margin:0">Live view updates continuously; the advisor's 15-min Monday slot replaces the current weekly document-writing ritual.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px">
+            <div class="card-head"><h3>Where it reflects &amp; how data is recorded (minimal human intervention)</h3></div>
+            <div class="stack">
+              <div class="stat-row"><span class="sr-name">Focus time, screen time, feature use</span><span class="sr-val">App event stream → N8N → dashboard</span></div>
+              <div class="stat-row"><span class="sr-name">Active minutes &amp; recovery</span><span class="sr-val">Apple/Samsung/WHOOP/Garmin → health sync → N8N</span></div>
+              <div class="stat-row"><span class="sr-name">Quizzes, chapters, tasks</span><span class="sr-val">App student inputs → ClickUp → N8N</span></div>
+              <div class="stat-row"><span class="sr-name">Sessions, workshops, ratings</span><span class="sr-val">ClickUp (CRM) + post-session form → N8N</span></div>
+              <div class="stat-row"><span class="sr-name">Alerts on missed deadlines</span><span class="sr-val">N8N rule → message to student + parent + advisor</span></div>
+            </div>
+            <div class="insight" style="margin-top:14px"><span class="ico">i</span><div>Advisors only <b>review and act</b>; the system <b>collects, scores and alerts</b>. Data from different folders in ClickUp collapses into one templatised record per Alcovian.</div></div>
+          </div>
+        </section>
+
+        <footer class="muted" style="font-size:11.5px;padding-top:8px;border-top:1px solid var(--line-2)">
+          Alcovia · Student progress dashboard prototype. Data shown is illustrative (12-Alcovian sample).
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-panel" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3 id="modalTitle"></h3>
+        <button class="btn icon" id="modalClose" data-close title="Close">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
