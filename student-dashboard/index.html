@@ -21,6 +21,7 @@
       <div class="nav-label">Rigour</div>
       <nav class="nav" id="nav">
         <button class="navlink active" data-page="overview"><span class="dot"></span>Journey Scorecard</button>
+        <button class="navlink" data-page="journey"><span class="dot"></span>Journey · Student &amp; Parent</button>
         <button class="navlink" data-page="daily"><span class="dot"></span>Daily</button>
         <button class="navlink" data-page="weekly"><span class="dot"></span>Weekly · Academic</button>
         <button class="navlink" data-page="monthly"><span class="dot"></span>Monthly · Career</button>
@@ -91,6 +92,38 @@
           </div>
 
           <div style="margin-top:16px"><div class="insight" id="ovInsight"></div></div>
+        </section>
+
+        <!-- ============ JOURNEY (STUDENT + PARENT) ============ -->
+        <section class="page" data-page="journey">
+          <div class="section-head">
+            <span class="eyebrow">Journey</span>
+            <h2>User journey — the Alcovian &amp; the parent</h2>
+            <span class="hint">Stage-by-stage path, who owns it, and where the cohort is today</span>
+          </div>
+
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-head">
+              <h3 id="journeyTitle">Alcovian journey</h3>
+              <div style="margin-left:auto" class="seg" id="journeyToggle">
+                <button data-j="student" class="active">Alcovian</button>
+                <button data-j="parent">Parent</button>
+              </div>
+            </div>
+            <div id="journeySteps"></div>
+            <div class="legend" style="margin-top:14px">
+              <span class="li"><span class="sw" style="background:var(--accent-grad)"></span>Reached by cohort</span>
+              <span class="li"><span class="sw" style="background:var(--line)"></span>Not yet reached</span>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h3>Where each Alcovian &amp; family is today</h3><span class="sub" id="journeySub"></span></div>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Alcovian</th><th class="num">Days in program</th><th>Alcovian journey stage</th><th>Parent journey stage reached</th><th>Status</th></tr></thead>
+              <tbody id="journeyRows"></tbody>
+            </table></div>
+          </div>
         </section>
 
         <!-- ============ DAILY ============ -->

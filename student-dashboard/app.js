@@ -16,6 +16,30 @@ const mean = (a) => a.reduce((s, x) => s + x, 0) / (a.length || 1);
 /* ---------- student data (12-Alcovian sample) ---------- */
 const NAMES = ["Aarav", "Zoya", "Ishaan", "Myra", "Kabir", "Ananya", "Vihaan", "Diya", "Reyaan", "Saanvi", "Advait", "Kiara"];
 
+/* ---------- journeys ---------- */
+const STUDENT_STAGES = [
+  { name: "Enrolled", desc: "Onboarded into Alcovia", owner: "Admissions" },
+  { name: "Trial start", desc: "3-month trial begins", owner: "Advisor" },
+  { name: "Daily rigour", desc: "Timetable, quizzes, focus, wearables", owner: "Advisor + app" },
+  { name: "Weekly roadmap", desc: "Academic roadmap & goal setting", owner: "Advisor" },
+  { name: "Monthly career", desc: "Workshop, pod, peer, mentor", owner: "Program" },
+  { name: "Quarterly themes", desc: "Social work · entrepreneurship · out-of-city", owner: "Program" },
+  { name: "Roadmaps delivered", desc: "Career, personal, academic signed off", owner: "Advisor" },
+  { name: "Full-program decision", desc: "Trial → full programme", owner: "Sales + Advisor" },
+  { name: "Renewed / advanced", desc: "Summer programs, alumni", owner: "Program" },
+];
+const PARENT_STAGES = [
+  { name: "Awareness", desc: "Sees Meta ad / organic content", owner: "Marketing" },
+  { name: "Discovery call set", desc: "Intro call scheduled", owner: "Sales" },
+  { name: "Discovery call attended", desc: "Shows up to the call", owner: "Sales" },
+  { name: "Ambition interview", desc: "Interview with the teen", owner: "Sales" },
+  { name: "Architect session", desc: "Personalised roadmap shown to parent + teen", owner: "Sales + Advisor" },
+  { name: "Enrolment & payment", desc: "Signs up", owner: "Sales" },
+  { name: "Progress updates", desc: "Engages with the weekly dashboard", owner: "Advisor" },
+  { name: "Parent-child workshop", desc: "Quarterly bonding workshop", owner: "Program" },
+  { name: "Renewal / referral", desc: "Renews or refers another family", owner: "Sales" },
+];
+
 function generate() {
   const r = mulberry32(20241101);
   const rnd = (a, b) => a + r() * (b - a);
@@ -48,6 +72,9 @@ function generate() {
     s.roadmap = Math.round((s.personal + s.syllabusPct + (s.career ? 100 : 0)) / 3);
     s.participation = Math.round(((s.workshopsAtt / 2) + (s.podAtt / 2) + s.peerAtt + s.mentorAtt + (s.brandingDone ? 1 : 0)) / 6 * 100);
     s.status = (syllabusPct >= 58 && rigourStage >= 3 && focusMin >= 12) ? "ontrack" : (focusMin < 9 || syllabusPct < 34 || s.quizAttended <= 2) ? "risk" : "mid";
+    s.daysIn = Math.round(rnd(24, 150));
+    s.stage = Math.round(rnd(2, 8));
+    s.parentStage = Math.round(rnd(4, 8));
     return s;
   });
   return { students };
@@ -335,6 +362,35 @@ function renderQuarterly(d) {
 }
 
 let rosterFilter = "all";
+let journeyView = "student";
+function renderJourney(which) {
+  which = which || journeyView;
+  const stages = which === "parent" ? PARENT_STAGES : STUDENT_STAGES;
+  const key = which === "parent" ? "parentStage" : "stage";
+  const S = DATA.students;
+  const reached = stages.map((_, i) => S.filter((s) => s[key] >= i).length);
+  const max = S.length;
+  setHTML("journeyTitle", which === "parent" ? "Parent journey" : "Alcovian journey");
+  setHTML("journeySteps", `<div class="stepper">` + stages.map((st, i) => {
+    const n = reached[i];
+    const prev = i === 0 ? n : reached[i - 1];
+    const conv = i === 0 ? null : (prev ? Math.round((n / prev) * 100) : 0);
+    const pill = conv === null ? "" : `<span class="fpill ${conv >= 80 ? "good" : conv >= 50 ? "mid" : "bad"}">${conv}%</span>`;
+    return `<div class="step${n > 0 ? " reached" : ""}">
+      <div class="idx">${i + 1}</div>
+      <div><div class="sname">${st.name}</div><div class="sdesc">${st.desc}</div><span class="sowner">${st.owner}</span></div>
+      <div class="scount"><div class="n">${n}</div><div class="cap">of ${max}</div></div>
+      <div class="sconv">${pill}</div>
+    </div>`;
+  }).join("") + `</div>`);
+  setHTML("journeySub", `${S.length} Alcovians · avg ${Math.round(mean(S.map((s) => s.daysIn)))} days in program`);
+  setHTML("journeyRows", S.map((s) => `<tr data-drill="student:${s.name}">
+    <td><span class="cname">${s.name}</span> <span style="color:var(--faint)">↗</span></td>
+    <td class="num">${s.daysIn}d</td>
+    <td>${STUDENT_STAGES[Math.min(s.stage, STUDENT_STAGES.length - 1)].name}</td>
+    <td>${PARENT_STAGES[Math.min(s.parentStage, PARENT_STAGES.length - 1)].name}</td>
+    <td>${badge(s.status)}</td></tr>`).join(""));
+}
 function renderRoster() {
   const S = DATA.students.filter((s) => rosterFilter === "all" || s.status === rosterFilter);
   setHTML("rosterRows", S.map((s) => `<tr data-drill="student:${s.name}">
@@ -381,7 +437,7 @@ function openDrill(key) {
 function closeDrill() { document.getElementById("modal").hidden = true; document.body.style.overflow = ""; }
 
 /* ---------- tabs + boot ---------- */
-const PAGE_TITLES = { overview: "Journey Scorecard", daily: "Daily Rigour", weekly: "Weekly · Academic Roadmap", monthly: "Monthly · Career Discovery", quarterly: "Quarterly · Themes & Roadmaps", students: "Students", approach: "Approach" };
+const PAGE_TITLES = { overview: "Journey Scorecard", journey: "Journey · Alcovian & Parent", daily: "Daily Rigour", weekly: "Weekly · Academic Roadmap", monthly: "Monthly · Career Discovery", quarterly: "Quarterly · Themes & Roadmaps", students: "Students", approach: "Approach" };
 function showPage(name) {
   document.querySelectorAll(".page").forEach((p) => p.classList.toggle("active", p.dataset.page === name));
   document.querySelectorAll("#nav .navlink").forEach((b) => b.classList.toggle("active", b.dataset.page === name));
@@ -390,6 +446,7 @@ function showPage(name) {
 }
 function renderAll() {
   renderOverview(DATA);
+  renderJourney(journeyView);
   renderDaily(DATA);
   renderWeekly(DATA);
   renderMonthly(DATA);
@@ -408,6 +465,13 @@ document.addEventListener("DOMContentLoaded", () => {
     rosterFilter = btn.dataset.f;
     document.querySelectorAll("#rosterFilter button").forEach((b) => b.classList.toggle("active", b === btn));
     renderRoster();
+  });
+
+  document.getElementById("journeyToggle").addEventListener("click", (e) => {
+    const btn = e.target.closest("button"); if (!btn) return;
+    journeyView = btn.dataset.j;
+    document.querySelectorAll("#journeyToggle button").forEach((b) => b.classList.toggle("active", b === btn));
+    renderJourney(journeyView);
   });
 
   document.getElementById("cohort").addEventListener("change", (e) => {

@@ -380,3 +380,27 @@ td .cname { font-weight: 620; color: var(--ink); }
 }
 .drill-h { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .7px; color: var(--faint); margin: 20px 0 8px; }
 .modal .chart { margin-bottom: 4px; }
+
+/* ---------- Journey stepper ---------- */
+.stepper { display: flex; flex-direction: column; gap: 2px; }
+.step {
+  display: grid; grid-template-columns: 40px 1fr 96px 110px; gap: 16px; align-items: center;
+  padding: 12px 4px; border-bottom: 1px dashed var(--line-2); position: relative;
+}
+.step:last-child { border-bottom: 0; }
+.step .idx {
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  font-weight: 750; font-size: 13px; background: var(--bg-soft); color: var(--muted); border: 1px solid var(--line);
+}
+.step.reached .idx { background: var(--accent-grad); color: #fff; border: 0; box-shadow: 0 6px 14px -6px rgba(91,91,240,.6); }
+.step .sname { font-size: 13px; font-weight: 650; color: var(--ink); }
+.step .sdesc { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.step .sowner { font-size: 10.5px; font-weight: 650; color: var(--brand); background: rgba(91,91,240,.1); padding: 1px 8px; border-radius: 20px; margin-top: 5px; display: inline-block; }
+.step .scount { text-align: right; }
+.step .scount .n { font-size: 17px; font-weight: 780; letter-spacing: -.4px; color: var(--ink); }
+.step .scount .cap { font-size: 10.5px; color: var(--muted); }
+.step .sconv { display: flex; justify-content: flex-end; }
+@media (max-width: 720px) {
+  .step { grid-template-columns: 34px 1fr 80px; }
+  .step .sconv { display: none; }
+}
